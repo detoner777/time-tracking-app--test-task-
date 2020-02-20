@@ -1,3 +1,33 @@
 body {
- 
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
+
+.CreateNew {
+    width: 70%;
+    margin: auto;
+    display: flex;
+}
+
+.CreateNew input {
+    flex-grow: 1;
+    padding: 1rem;
+    background: transparent;
+    border: 0 none;
+    background: #f3f3f3;
+    border: 1px solid #ccc;
+    margin-right: 0.5rem;
+    border-radius: 0.5rem;
+  }
+  .CreateNew button {
+    background: darkslateblue;
+    color: #fff;
+    cursor: pointer;
+    padding: 0 1rem;
+    font-size: 1.25rem;
+    transition: 0.25s ease-in-out;
+    border-radius: 0.5rem;
+  }
+  .CreateNew button:hover {
+    background: #333;
+  }
