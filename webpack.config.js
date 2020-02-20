@@ -10,9 +10,19 @@ module.exports = {
   module: {
     rules: [
       { test: /\.(js)$/, use: "babel-loader" },
-      { test: /\.css$/, use: ["style-loader", "css-loader"] }
+      { test: /\.css$/, use: ["style-loader", "css-loader"] },
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: ["babel-loader"]
+      },
+      {
+        test: /\.svg$/,
+        use: ["@svgr/webpack"]
+      }
     ]
   },
+
   mode: "development",
   plugins: [
     new HtmlWebpackPlugin({
@@ -20,6 +30,5 @@ module.exports = {
     })
   ]
 };
-
 
 //npm run webpack

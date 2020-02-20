@@ -3,31 +3,62 @@ body {
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
+/* -----------------Input--------------------- */
+
 .CreateNew {
-    width: 70%;
-    margin: auto;
-    display: flex;
+  width: 70%;
+  margin: auto;
+  display: flex;
 }
 
 .CreateNew input {
-    flex-grow: 1;
-    padding: 1rem;
-    background: transparent;
-    border: 0 none;
-    background: #f3f3f3;
-    border: 1px solid #ccc;
-    margin-right: 0.5rem;
-    border-radius: 0.5rem;
-  }
-  .CreateNew button {
-    background: darkslateblue;
-    color: #fff;
-    cursor: pointer;
-    padding: 0 1rem;
-    font-size: 1.25rem;
-    transition: 0.25s ease-in-out;
-    border-radius: 0.5rem;
-  }
-  .CreateNew button:hover {
-    background: #333;
-  }
+  flex-grow: 1;
+  padding: 1rem;
+  background: transparent;
+  border: 0 none;
+  background: #f3f3f3;
+  border: 1px solid #ccc;
+  margin-right: 0.5rem;
+  border-radius: 0.5rem;
+}
+.CreateNew button {
+  background: darkslateblue;
+  color: #fff;
+  cursor: pointer;
+  padding: 0 1rem;
+  font-size: 1.25rem;
+  transition: 0.25s ease-in-out;
+  border-radius: 0.5rem;
+}
+.CreateNew button:hover {
+  background: #333;
+}
+
+/* ------------------Main Component---------------- */
+
+
+.timer_active .timer__time {
+  font-weight: bold;
+}
+.timer_big .timer__time {
+  font-size: 2.5rem;
+  font-weight: 900;
+}
+.task {
+  padding: 0.5rem 0.5rem 0.1rem 0.5rem;
+  margin: 1rem 0;
+}
+.task_active {
+  background-color: #ff8f02;
+}
+
+.task__input {
+  width: 100%;
+  padding: 0.25rem 0.25rem;
+  font-size: 1em;
+}
+.task__input:not(:focus) {
+  padding: 0.25rem 0;
+  border: 1px solid transparent;
+  background: none;
+}
