@@ -102,11 +102,12 @@ class MainComponent extends React.Component {
 
   addNewTask = () => {
     const { idCounter, tasks, inputValue } = this.state;
-    let value = inputValue === "" ? (value = carentDate()) : inputValue;
+    let titleValue =
+      inputValue === "" ? (titleValue = carentDate()) : inputValue;
     this.setState({
       tasks: tasks.concat({
         id: idCounter,
-        title: value,
+        title: titleValue,
         seconds: 0
       }),
       idCounter: idCounter + 1,
@@ -120,13 +121,12 @@ class MainComponent extends React.Component {
     return (
       <div
         style={{
-          maxWidth: `700px`
+          maxWidth: `560px`
         }}
       >
         <div className="CreateNew">
           <input
             type="text"
-            // value=""
             onChange={e => {
               const title = e.target.value;
               this.setState({
@@ -150,43 +150,47 @@ class MainComponent extends React.Component {
         </div>
         <div className="tasks page">
           <div className="tasks__list">
-            {tasks.map(({ id, title, seconds }, index) => (
-              <div
-                key={id}
-                className={`task${id === activeTaskId ? " task_active" : ""}`}
-              >
-                <input
-                  className="task__input"
-                  placeholder="Enter the name of task..."
-                  value={title}
-                  onChange={e => {
-                    const title = e.target.value;
-                    this.setState({
-                      tasks: tasks.map((task, taskIndex) =>
-                        index !== taskIndex ? task : { ...task, title }
-                      )
-                    });
-                  }}
-                />
-                <Timer
-                  className="task__timer"
-                  timeString={formatTime(seconds)}
-                  active={activeTaskId === id}
-                  onPlay={() => {
-                    this.setState({ activeTaskId: id });
-                  }}
-                  onPause={() => {
-                    this.setState({ activeTaskId: null });
-                  }}
-                  onRemove={() => {
-                    this.setState({
-                      activeTaskId: activeTaskId === id ? null : activeTaskId,
-                      tasks: tasks.filter((_, taskIndex) => index !== taskIndex)
-                    });
-                  }}
-                />
-              </div>
-            ))}
+            {tasks
+              .sort((a, b) => (b.id > a.id ? 1 : -1))
+              .map(({ id, title, seconds }, index) => (
+                <div
+                  key={id}
+                  className={`task${id === activeTaskId ? " task_active" : ""}`}
+                >
+                  <input
+                    className="task__input"
+                    placeholder="Enter the name of task..."
+                    value={title}
+                    onChange={e => {
+                      const title = e.target.value;
+                      this.setState({
+                        tasks: tasks.map((task, taskIndex) =>
+                          index !== taskIndex ? task : { ...task, title }
+                        )
+                      });
+                    }}
+                  />
+                  <Timer
+                    className="task__timer"
+                    timeString={formatTime(seconds)}
+                    active={activeTaskId === id}
+                    onPlay={() => {
+                      this.setState({ activeTaskId: id });
+                    }}
+                    onPause={() => {
+                      this.setState({ activeTaskId: null });
+                    }}
+                    onRemove={() => {
+                      this.setState({
+                        activeTaskId: activeTaskId === id ? null : activeTaskId,
+                        tasks: tasks.filter(
+                          (_, taskIndex) => index !== taskIndex
+                        )
+                      });
+                    }}
+                  />
+                </div>
+              ))}
           </div>
         </div>
       </div>

@@ -36,7 +36,63 @@ body {
 
 /* ------------------Main Component---------------- */
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes emphasize {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.4);
+  }
+}
 
+input {
+  box-sizing: border-box;
+  border: 1px solid #333333;
+  outline: none;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 0 0.5rem;
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  margin-right: -0.25rem;
+}
+.timer__time {
+  flex: 1;
+  font-size: 1.5rem;
+}
+.timer__control-button {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #333333;
+  margin: 0 0.25rem;
+}
+.timer__control-button::-moz-focus-inner {
+  border: 0;
+}
+.timer__control-button:hover,
+.timer__control-button:focus {
+  outline: 0;
+  animation: emphasize 0.2s 1;
+  animation-fill-mode: forwards;
+}
 .timer_active .timer__time {
   font-weight: bold;
 }
