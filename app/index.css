@@ -6,7 +6,7 @@ body {
 /* -----------------Input--------------------- */
 
 .CreateNew {
-  width: 70%;
+  width: 100%;
   margin: auto;
   display: flex;
 }
@@ -22,7 +22,7 @@ body {
   border-radius: 0.5rem;
 }
 .CreateNew button {
-  background: darkslateblue;
+  background: rgb(130, 202, 130);
   color: #fff;
   cursor: pointer;
   padding: 0 1rem;
@@ -31,7 +31,7 @@ body {
   border-radius: 0.5rem;
 }
 .CreateNew button:hover {
-  background: #333;
+  background: rgb(5, 100, 2);
 }
 
 /* ------------------Main Component---------------- */
@@ -59,10 +59,12 @@ input {
   outline: none;
 }
 .container {
+  text-align: center;
+  max-width: 560px;
   display: flex;
   flex-direction: column;
-  margin: auto;
-  padding: 0 0.5rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .timer {
@@ -73,10 +75,10 @@ input {
 .timer__time {
   flex: 1;
   font-size: 1.5rem;
+  padding-right: 5rem;
 }
 .timer__control-button {
   width: 40px;
-  height: 40px;
   cursor: pointer;
   background: none;
   border: none;
@@ -84,6 +86,7 @@ input {
   color: #333333;
   margin: 0 0.25rem;
 }
+
 .timer__control-button::-moz-focus-inner {
   border: 0;
 }
@@ -95,17 +98,21 @@ input {
 }
 .timer_active .timer__time {
   font-weight: bold;
+  color: #002c6e;
 }
 .timer_big .timer__time {
   font-size: 2.5rem;
   font-weight: 900;
 }
 .task {
-  padding: 0.5rem 0.5rem 0.1rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   margin: 1rem 0;
 }
 .task_active {
-  background-color: #ff8f02;
+  background-color: rgb(175, 228, 175);
 }
 
 .task__input {

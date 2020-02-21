@@ -40,7 +40,12 @@ const Timer = ({
       {active ? (
         <Pause className="icon-pause" />
       ) : (
-        <Play className="icon-play" />
+        <Play
+          className="icon-play"
+          width="35px"
+          height="30px"
+          viewBox="3 6 20 10"
+        />
       )}{" "}
     </button>
   </div>
@@ -119,11 +124,7 @@ class MainComponent extends React.Component {
     const { tasks, activeTaskId } = this.state;
 
     return (
-      <div
-        style={{
-          maxWidth: `560px`
-        }}
-      >
+      <div>
         <div className="CreateNew">
           <input
             type="text"
@@ -145,7 +146,13 @@ class MainComponent extends React.Component {
               }
             }}
           >
-            Add
+            {" "}
+            <Play
+              className="icon-play"
+              width="40px"
+              height="35px"
+              viewBox="2 6 20 10"
+            />
           </button>
         </div>
         <div className="tasks page">
