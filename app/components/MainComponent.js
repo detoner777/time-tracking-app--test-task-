@@ -57,6 +57,10 @@ function carentDate() {
     .toLocaleTimeString()
     .slice(0, -3)} `;
 }
+function lastDate() {
+  const bd = new Date();
+  return `${bd.getTime()}`;
+}
 
 const defaultState = {
   idCounter: 1,
@@ -83,7 +87,51 @@ class MainComponent extends React.Component {
     };
   }
 
+  // componentDidUpdate() {
+  //   localStorage.setItem("timeTrackerState", JSON.stringify(this.state));
+  // }
+
   componentDidMount() {
+    let fetchedLocalState;
+    try {
+      fetchedLocalState = localStorage.getItem("timeTrackerState");
+      fetchedLocalState = JSON.parse(fetchedLocalState);
+    } catch (err) {
+      console.error(err);
+    }
+    if (fetchedLocalState.activeTaskId === null) {
+      console.log(42);
+    } else {
+      const searchTerm = fetchedLocalState.activeTaskId;
+      const fetchedLocalStateHiden = fetchedLocalState.tasks.find(
+        task => task.id === searchTerm
+      ).hiden;
+      const fetchedLocalStateSeconds = fetchedLocalState.tasks.find(
+        task => task.id === searchTerm
+      ).secondsBeforPause;
+      // console.log(fetchedLocalStateSeconds);
+
+      const mountDate = lastDate();
+      const gapDate = mountDate - fetchedLocalStateHiden;
+      const floorGapDate = Math.floor(gapDate / 1000);
+      // console.log(floorGapDate);
+      this.setState(({ activeTaskId, tasks }) => {
+        if (activeTaskId === null) {
+          return;
+        }
+        return {
+          tasks: tasks.map(task =>
+            task.id !== activeTaskId
+              ? task
+              : {
+                  ...task,
+                  seconds: floorGapDate + fetchedLocalStateSeconds
+                }
+          )
+        };
+      });
+    }
+
     setInterval(() => {
       this.setState(
         ({ activeTaskId, tasks }) => {
@@ -94,7 +142,11 @@ class MainComponent extends React.Component {
             tasks: tasks.map(task =>
               task.id !== activeTaskId
                 ? task
-                : { ...task, seconds: task.seconds + 1 }
+                : {
+                    ...task,
+                    seconds: task.seconds + 1,
+                    hiden: task.hiden
+                  }
             )
           };
         },
@@ -113,11 +165,17 @@ class MainComponent extends React.Component {
       tasks: tasks.concat({
         id: idCounter,
         title: titleValue,
-        seconds: 0
+        seconds: 0,
+        hiden: +lastDate(),
+        secondsBeforPause: 0
       }),
       idCounter: idCounter + 1,
       activeTaskId: idCounter
     });
+  };
+
+  setLocalStorage = () => {
+    localStorage.setItem("timeTrackerState", JSON.stringify(this.state));
   };
 
   render() {
@@ -182,10 +240,27 @@ class MainComponent extends React.Component {
                     timeString={formatTime(seconds)}
                     active={activeTaskId === id}
                     onPlay={() => {
-                      this.setState({ activeTaskId: id });
+                      this.setState({
+                        activeTaskId: id,
+                        tasks: tasks.map((task, taskIndex) =>
+                          index !== taskIndex
+                            ? task
+                            : {
+                                ...task,
+                                hiden: +lastDate()
+                              }
+                        )
+                      });
                     }}
                     onPause={() => {
-                      this.setState({ activeTaskId: null });
+                      this.setState({
+                        activeTaskId: null,
+                        tasks: tasks.map((task, taskIndex) =>
+                          index !== taskIndex
+                            ? task
+                            : { ...task, secondsBeforPause: seconds }
+                        )
+                      });
                     }}
                     onRemove={() => {
                       this.setState({

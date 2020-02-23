@@ -3,7 +3,7 @@ import MainComponent from "./components/MainComponent";
 
 export default function App() {
   return (
-    <div class="container">
+    <div className="container">
       <h1>Tracker APP</h1>
       <MainComponent />
     </div>
