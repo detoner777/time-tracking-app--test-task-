@@ -1,8 +1,9 @@
 import React from "react";
 import Play from "../icons/play.svg";
-import Pause from "../icons/pause.svg";
-import Remove from "../icons/remove.svg";
 
+import {Timer} from "./Timer";
+
+//convert seconds to HH:MM:SS
 function formatTime(timeInSeconds = 0) {
   const hours = Math.floor(timeInSeconds / 3600);
   const minutes = Math.floor((timeInSeconds / 60) % 60);
@@ -13,43 +14,6 @@ function formatTime(timeInSeconds = 0) {
   const paddedSeconds = seconds.toString().padStart(2, "0");
   return `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
 }
-
-const Timer = ({
-  className = "",
-  timeString,
-  active,
-  onPlay,
-  onPause,
-  onRemove
-}) => (
-  <div className={`timer ${className} ${active ? "timer_active" : ""}`.trim()}>
-    <div className="timer__time">{timeString}</div>
-    <button
-      className="timer__control-button"
-      title="Remove task"
-      onClick={onRemove}
-    >
-      <Remove className="icon-cancel" />
-    </button>
-
-    <button
-      className="timer__control-button"
-      title={active ? "Pause" : "Play"}
-      onClick={active ? onPause : onPlay}
-    >
-      {active ? (
-        <Pause className="icon-pause" />
-      ) : (
-        <Play
-          className="icon-play"
-          width="35px"
-          height="30px"
-          viewBox="3 6 20 10"
-        />
-      )}{" "}
-    </button>
-  </div>
-);
 
 function carentDate() {
   const ld = new Date();
@@ -68,10 +32,9 @@ const defaultState = {
   tasks: []
 };
 
-class MainComponent extends React.Component {
+class CreateTimers extends React.Component {
   constructor(props) {
     super(props);
-    this.addNewTask = this.addNewTask.bind(this);
 
     let preservedState = {};
 
@@ -89,6 +52,7 @@ class MainComponent extends React.Component {
   }
 
   componentDidMount() {
+    // fetching data from localstorage
     let fetchedLocalState = {};
     try {
       fetchedLocalState = localStorage.getItem("timeTrackerState");
@@ -96,9 +60,12 @@ class MainComponent extends React.Component {
     } catch (err) {
       console.error(err);
     }
+    //if have now previos sesion,
     if (fetchedLocalState === null) {
       localStorage.setItem("timeTrackerState", JSON.stringify(this.state));
-    } else {
+    }
+    // filter to find out time when the browser was closed
+    else {
       if (fetchedLocalState.activeTaskId === null) {
       } else {
         const searchTerm = fetchedLocalState.activeTaskId;
@@ -130,7 +97,7 @@ class MainComponent extends React.Component {
         });
       }
     }
-
+    //time loop
     setInterval(() => {
       this.setState(
         ({ activeTaskId, tasks }) => {
@@ -159,9 +126,7 @@ class MainComponent extends React.Component {
   addNewTask = () => {
     const { idCounter, tasks, inputValue } = this.state;
     let titleValue =
-      inputValue === "" 
-        ? (titleValue = carentDate())
-        : inputValue;
+      inputValue === "" ? (titleValue = carentDate()) : inputValue;
     this.setState({
       tasks: tasks.concat({
         id: idCounter,
@@ -176,8 +141,19 @@ class MainComponent extends React.Component {
     });
   };
 
-  setLocalStorage = () => {
-    localStorage.setItem("timeTrackerState", JSON.stringify(this.state));
+  handleChange = e => {
+    e.preventDefault();
+    this.setState({
+      inputValue: e.target.value
+    });
+  };
+
+  handleKeyPress = e => {
+    if (e.charCode == 13) {
+      {
+        this.addNewTask();
+      }
+    }
   };
 
   render() {
@@ -189,20 +165,9 @@ class MainComponent extends React.Component {
           <input
             value={this.inputValue}
             type="text"
-            onChange={e => {
-              e.preventDefault();
-              this.setState({
-                inputValue: e.target.value
-              });
-            }}
+            onChange={this.handleChange}
             value={this.state.inputValue}
-            onKeyPress={e => {
-              if (e.charCode == 13) {
-                {
-                  this.addNewTask();
-                }
-              }
-            }}
+            onKeyPress={this.handleKeyPress}
             placeholder="Enter tracker name"
           />
           <button onClick={this.addNewTask}>
@@ -282,4 +247,4 @@ class MainComponent extends React.Component {
   }
 }
 
-export default MainComponent;
+export default CreateTimers;

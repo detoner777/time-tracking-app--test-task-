@@ -1,11 +1,11 @@
 import React from "react";
-import MainComponent from "./components/MainComponent";
+import CreateTimers from "./components/CreateTimers";
 
 export default function App() {
   return (
     <div className="container">
       <h1>Tracker APP</h1>
-      <MainComponent />
+      <CreateTimers />
     </div>
   );
 }
