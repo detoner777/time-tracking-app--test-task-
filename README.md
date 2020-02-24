@@ -1,5 +1,5 @@
 # Time tracking app 
-[APP link](https://time-tracking-app.netlify.com/)
+[DEMO link](https://time-tracking-app.netlify.com/)
 Application that allows you to track time.
 
 ## 
