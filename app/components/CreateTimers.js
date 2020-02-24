@@ -1,7 +1,7 @@
 import React from "react";
 import Play from "../icons/play.svg";
 
-import {Timer} from "./Timer";
+import { Timer } from "./Timer";
 
 //convert seconds to HH:MM:SS
 function formatTime(timeInSeconds = 0) {
@@ -214,7 +214,8 @@ class CreateTimers extends React.Component {
                             ? task
                             : {
                                 ...task,
-                                hiden: +lastDate()
+                                hiden: +lastDate(),
+                                secondsBeforPause: seconds
                               }
                         )
                       });
