@@ -71,6 +71,7 @@ const defaultState = {
 class MainComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.addNewTask = this.addNewTask.bind(this);
 
     let preservedState = {};
 
@@ -85,10 +86,6 @@ class MainComponent extends React.Component {
       ...defaultState,
       ...preservedState
     };
-  }
-
-  componentDidUpdate() {
-    localStorage.setItem("timeTrackerState", JSON.stringify(this.state));
   }
 
   componentDidMount() {
@@ -111,12 +108,11 @@ class MainComponent extends React.Component {
         const fetchedLocalStateSeconds = fetchedLocalState.tasks.find(
           task => task.id === searchTerm
         ).secondsBeforPause;
-        // console.log(fetchedLocalStateSeconds);
 
         const mountDate = lastDate();
         const gapDate = mountDate - fetchedLocalStateHiden;
         const floorGapDate = Math.floor(gapDate / 1000);
-        // console.log(floorGapDate);
+
         this.setState(({ activeTaskId, tasks }) => {
           if (activeTaskId === null) {
             return;
@@ -136,29 +132,36 @@ class MainComponent extends React.Component {
     }
 
     setInterval(() => {
-      this.setState(({ activeTaskId, tasks }) => {
-        if (activeTaskId === null) {
-          return;
+      this.setState(
+        ({ activeTaskId, tasks }) => {
+          if (activeTaskId === null) {
+            return;
+          }
+          return {
+            tasks: tasks.map(task =>
+              task.id !== activeTaskId
+                ? task
+                : {
+                    ...task,
+                    seconds: task.seconds + 1,
+                    hiden: task.hiden
+                  }
+            )
+          };
+        },
+        () => {
+          localStorage.setItem("timeTrackerState", JSON.stringify(this.state));
         }
-        return {
-          tasks: tasks.map(task =>
-            task.id !== activeTaskId
-              ? task
-              : {
-                  ...task,
-                  seconds: task.seconds + 1,
-                  hiden: task.hiden
-                }
-          )
-        };
-      });
+      );
     }, 1000);
   }
 
   addNewTask = () => {
     const { idCounter, tasks, inputValue } = this.state;
     let titleValue =
-      inputValue === "" ? (titleValue = carentDate()) : inputValue;
+      inputValue === "" 
+        ? (titleValue = carentDate())
+        : inputValue;
     this.setState({
       tasks: tasks.concat({
         id: idCounter,
@@ -168,7 +171,8 @@ class MainComponent extends React.Component {
         secondsBeforPause: 0
       }),
       idCounter: idCounter + 1,
-      activeTaskId: idCounter
+      activeTaskId: idCounter,
+      inputValue: ""
     });
   };
 
@@ -183,25 +187,25 @@ class MainComponent extends React.Component {
       <div>
         <div className="CreateNew">
           <input
+            value={this.inputValue}
             type="text"
             onChange={e => {
-              const title = e.target.value;
+              e.preventDefault();
               this.setState({
-                inputValue: title
+                inputValue: e.target.value
               });
+            }}
+            value={this.state.inputValue}
+            onKeyPress={e => {
+              if (e.charCode == 13) {
+                {
+                  this.addNewTask();
+                }
+              }
             }}
             placeholder="Enter tracker name"
           />
-          <button
-            onClick={this.addNewTask}
-            onKeyDown={e => {
-              if (e.keyCode === 13) {
-                this.setState({
-                  inputValue: title
-                });
-              }
-            }}
-          >
+          <button onClick={this.addNewTask}>
             {" "}
             <Play
               className="icon-play"
@@ -222,7 +226,7 @@ class MainComponent extends React.Component {
                 >
                   <input
                     className="task__input"
-                    placeholder="Enter the name of task..."
+                    placeholder="Edit tracker name.."
                     value={title}
                     onChange={e => {
                       const title = e.target.value;
